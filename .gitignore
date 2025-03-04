@@ -1,0 +1,30 @@
+# Byte-compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# Logs and temporary files
+*.log
+*.sqlite3
+instance/
+
+# VS Code settings (if using VS Code)
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Docker
+*.pid
+*.sock
+docker-compose.override.yml
+
+# Python cache
+*.egg-info/
+*.egg/
