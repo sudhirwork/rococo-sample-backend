@@ -43,7 +43,6 @@ def signup():
             "email": email,
             "firstname": firstname,
             "lastname": lastname,
-            "role": "admin"
         })
 
         get_user = db.get_one("users", {"email": email})
@@ -54,10 +53,15 @@ def signup():
                 "token": reset_token
             })
 
+            db.save('organizations', {
+                "name": f"{firstname}'s organization",
+                "user_id": get_user.get("id")
+            })
+
         # return jsonify({"success": "User registered successfully", "token": reset_token}), 200
 
         # Send welcome email
-        # reset_link = f"${FRONTEND_URL}/reset-password?token={reset_token}"
+        # reset_link = f"${FRONTEND_URL}/set-password?token={reset_token}"
         # email_payload = {
         #     "to": email,
         #     "subject": "Welcome to Our Service!",
@@ -116,13 +120,13 @@ def request_password_reset():
         )
 
         # Send reset email
-        reset_link = f"${FRONTEND_URL}/reset-password?token={reset_token}"
-        email_payload = {
-            "to": email,
-            "subject": "Password Reset Request",
-            "message": f"Click here to reset your password: {reset_link}"
-        }
-        requests.post(EMAIL_SERVICE_URL, json=email_payload)
+        # reset_link = f"${FRONTEND_URL}/reset-password?token={reset_token}"
+        # email_payload = {
+        #     "to": email,
+        #     "subject": "Password Reset Request",
+        #     "message": f"Click here to reset your password: {reset_link}"
+        # }
+        # requests.post(EMAIL_SERVICE_URL, json=email_payload)
 
         return jsonify({"message": "Password reset link sent to your email"}), 200
 
