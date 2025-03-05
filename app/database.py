@@ -13,3 +13,7 @@ def init_db():
         DATABASE_CONFIG["database"],
     )
     print("Database connected")
+
+if db is None:
+    init_db()
+
