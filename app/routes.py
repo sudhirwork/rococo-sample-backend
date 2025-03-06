@@ -6,7 +6,8 @@ from flask_jwt_extended import create_access_token, jwt_required, create_refresh
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import requests
-from app.config import API_VERSION, FRONTEND_URL, EMAIL_SERVICE_URL
+from app.config import API_VERSION, FRONTEND_URL, WELCOME_TEMPLATE_ID, RESET_TEMPLATE_ID
+from app.send_mail import send_email
 
 api_routes = Blueprint("api", __name__)
 
@@ -58,18 +59,13 @@ def signup():
                 "user_id": get_user.get("id")
             })
 
-        # return jsonify({"success": "User registered successfully", "token": reset_token}), 200
-
         # Send welcome email
-        # reset_link = f"${FRONTEND_URL}/set-password?token={reset_token}"
-        # email_payload = {
-        #     "to": email,
-        #     "subject": "Welcome to Our Service!",
-        #     "message": f"Hello {firstname} {lastname},\n\nWelcome to our platform! Click here to set your password: {reset_link}"
-        # }
-        # requests.post(EMAIL_SERVICE_URL, json=email_payload)
+        WELCOME_LINK = f"{FRONTEND_URL}/set-password?token={reset_token}"
+        if send_email(email, WELCOME_TEMPLATE_ID, WELCOME_LINK):
+            return jsonify({"message": "User registered successfully, check your email for a reset link"}), 200
+        else:
+            return jsonify({"message": "Signup successful, but email could not be sent."}), 500
 
-        return jsonify({"message": "User registered successfully, check your email for a reset link"}), 201
 
 # Signin API
 @api_routes.route("/signin", methods=["POST"])
@@ -119,16 +115,12 @@ def request_password_reset():
             (user["id"], reset_token)
         )
 
-        # Send reset email
-        # reset_link = f"${FRONTEND_URL}/reset-password?token={reset_token}"
-        # email_payload = {
-        #     "to": email,
-        #     "subject": "Password Reset Request",
-        #     "message": f"Click here to reset your password: {reset_link}"
-        # }
-        # requests.post(EMAIL_SERVICE_URL, json=email_payload)
+        RESET_LINK = f"{FRONTEND_URL}/reset-password?token={reset_token}"  
+        if send_email(email, RESET_TEMPLATE_ID, RESET_LINK):
+            return jsonify({"message": "Password reset link sent to your email"}), 200
+        else:
+            return jsonify({"message": "Signup successful, but email could not be sent."}), 500
 
-        return jsonify({"message": "Password reset link sent to your email"}), 200
 
 # Reset Password API
 @api_routes.route("/reset-password", methods=["POST"])
