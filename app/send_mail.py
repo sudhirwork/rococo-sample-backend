@@ -9,7 +9,7 @@ def send_email(to_email, template_id, link):
             {
                 "From": {"Email": MAILJET_SENDER, "Name": "Ecor Rouge"},
                 "To": [{"Email": to_email, "Name": to_email.split('@')[0]}],
-                "TemplateID": template_id,
+                "TemplateID": int(template_id),
                 "TemplateLanguage": True,
                 "Variables": {"verify_link": link}
             }
