@@ -14,10 +14,13 @@ Ensure you have the following installed on your machine:
 ├── .env.example          # Example environment variables file
 ├── table.sql             # SQL schema for PostgreSQL
 └── backend/              # Backend source code
-    ├── src/              # Source code
-    ├── tests/            # Test cases
-    ├── package.json      # Node.js dependencies
-    └── tsconfig.json     # TypeScript configuration
+    ├── app/              # Flask application
+    │   ├── __init__.py   # Application factory
+    │   ├── config.py         # Configuration
+    │   ├── routes.py     # Route definitions
+    │   ├── models.py     # Database models
+    │   └── ...           # Other application files
+    ├── requirements.txt  # Python dependencies
 ```
 
 ## Environment Variables
